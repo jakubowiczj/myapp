@@ -1,0 +1,79 @@
+
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: FastAPI on Lambda + Function URL (CORS) for MVP
+Globals:
+  Function:
+    Runtime: python3.13
+    Timeout: 10
+    MemorySize: 256
+    Architectures:
+      - x86_64
+Resources:
+  ApiFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: myapp-fastapi
+      Handler: app.main.handler
+      CodeUri: backend/fastapi_lambda
+      Policies:
+        - AWSLambdaBasicExecutionRole
+        - DynamoDBCrudPolicy:
+            TableName: !Ref ItemsTable
+      Environment:
+        Variables:
+          DDB_TABLE: !Ref ItemsTable
+          ALLOWED_ORIGINS: "*"
+    Metadata:
+      BuildMethod: python3.13
+    # Create a public Function URL with permissive CORS for MVP
+    # (Lock this down later by setting AuthType: AWS_IAM and using CloudFront or signed auth)
+    PropertiesWithFunctionUrl:
+      # Custom key recognized by SAM CLI to add FunctionUrlConfig after create
+      # (workaround pattern: we'll add FunctionUrl explicitly below)
+      {}
+  ApiFunctionUrl:
+    Type: AWS::Lambda::Url
+    Properties:
+      TargetFunctionArn: !GetAtt ApiFunction.Arn
+      AuthType: NONE
+      Cors:
+        AllowOrigins:
+          - "*"
+        AllowMethods:
+          - GET
+          - POST
+          - PUT
+          - DELETE
+        AllowHeaders:
+          - "*"
+  FunctionPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      FunctionName: !Ref ApiFunction
+      Action: lambda:InvokeFunctionUrl
+      Principal: "*"
+      FunctionUrlAuthType: NONE
+
+  ItemsTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: myapp-items
+      BillingMode: PROVISIONED
+      ProvisionedThroughput:
+        ReadCapacityUnits: 1
+        WriteCapacityUnits: 1
+      AttributeDefinitions:
+        - AttributeName: pk
+          AttributeType: S
+      KeySchema:
+        - AttributeName: pk
+          KeyType: HASH
+
+Outputs:
+  FunctionUrl:
+    Description: Public URL of the Lambda function
+    Value: !GetAtt ApiFunctionUrl.FunctionUrl
+  TableName:
+    Description: DynamoDB table name
+    Value: !Ref ItemsTable
