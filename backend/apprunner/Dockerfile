@@ -2,13 +2,13 @@ FROM python:3.12-slim
 
 WORKDIR /app
 
-# Zależności - w tym katalogu JEST requirements.txt
+RUN python -m pip install --upgrade pip setuptools wheel
+
+RUN apt-get update && apt-get install -y --no-install-recommends libpq5 \
+    && rm -rf /var/lib/apt/lists/*
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Kod aplikacji - w tym katalogu JEST folder app/
 COPY . /app
-
-# EB domyślnie kieruje ruch na 8080 → dopasowujemy
-EXPOSE 8080
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8080"]
+EXPOSE 80
+CMD ["uvicorn","app.main:app","--host","0.0.0.0","--port","80"]
