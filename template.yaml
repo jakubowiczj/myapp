@@ -23,7 +23,7 @@ Resources:
       Environment:
         Variables:
           DDB_TABLE: !Ref ItemsTable
-          ALLOWED_ORIGINS: "*"
+          ALLOWED_ORIGINS: "https://main.d3osy86l4wkruh.amplifyapp.com,http://localhost:3000"
     Metadata:
       BuildMethod: python3.13
     # Create a public Function URL with permissive CORS for MVP
@@ -39,7 +39,8 @@ Resources:
       AuthType: NONE
       Cors:
         AllowOrigins:
-          - "*"
+          - "https://main.d3osy86l4wkruh.amplifyapp.com"
+          - "http://localhost:3000"
         AllowMethods:
           - GET
           - POST
