@@ -1,7 +1,12 @@
 'use client';
+
 import { useState } from 'react';
 
 const API_BASE = process.env.NEXT_PUBLIC_API_BASE!;
+
+function errMsg(e: unknown) {
+  return e instanceof Error ? e.message : String(e);
+}
 
 export default function ItemsPage() {
   const [key, setKey] = useState('demo');
@@ -19,7 +24,7 @@ export default function ItemsPage() {
       const data = await res.json();
       setResult(JSON.stringify(data, null, 2));
     } catch (e: unknown) {
-      setResult(`PUT error: ${e.message ?? String(e)}`);
+      setResult(`PUT error: ${errMsg(e)}`);
     }
   }
 
@@ -32,7 +37,7 @@ export default function ItemsPage() {
       const data = await res.json();
       setResult(JSON.stringify(data, null, 2));
     } catch (e: unknown) {
-      setResult(`GET error: ${e.message ?? String(e)}`);
+      setResult(`GET error: ${errMsg(e)}`);
     }
   }
 
