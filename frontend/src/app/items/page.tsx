@@ -18,7 +18,7 @@ export default function ItemsPage() {
       });
       const data = await res.json();
       setResult(JSON.stringify(data, null, 2));
-    } catch (e: any) {
+    } catch (e: unknown) {
       setResult(`PUT error: ${e.message ?? String(e)}`);
     }
   }
@@ -31,7 +31,7 @@ export default function ItemsPage() {
       });
       const data = await res.json();
       setResult(JSON.stringify(data, null, 2));
-    } catch (e: any) {
+    } catch (e: unknown) {
       setResult(`GET error: ${e.message ?? String(e)}`);
     }
   }
