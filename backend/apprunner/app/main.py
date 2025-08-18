@@ -33,10 +33,6 @@ def health(db: Session = Depends(get_db)):
     except Exception as e:
         return {"status": "degraded", "detail": str(e)}
 
-@app.get("/ping")
-def ping():
-    return {"pong": True}
-
 # PUT przyjmuje dowolny JSON bez wrappera
 @app.put("/items/{pk}")
 def put_item(pk: str, body: dict = Body(default_factory=dict), db: Session = Depends(get_db)):
