@@ -16,3 +16,7 @@ __pycache__/
 # macOS
 .DS_Store
 .aider*
+
+# Local overrides
+.env.local
+docker-compose.local.yml
