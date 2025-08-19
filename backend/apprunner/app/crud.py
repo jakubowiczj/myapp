@@ -63,7 +63,7 @@ def list_user_rows(
                 email=r.email,
                 job_title=r.job_title,
                 avatar_url=r.avatar_url,
-                status=str(r.status),
+                status=r.status.value,  # Corrected
                 city_name=r.city_name,
                 work_location_name=r.work_location_name,
                 created_at=r.created_at,
