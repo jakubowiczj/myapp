@@ -1,6 +1,7 @@
 from datetime import datetime
 from pydantic import BaseModel, EmailStr
 from uuid import UUID
+from typing import Optional
 
 class CityOut(BaseModel):
     id: UUID
@@ -35,3 +36,16 @@ class UserOut(BaseModel):
 
     class Config:
         from_attributes = True
+
+class UserRow(BaseModel):
+    id: str
+    first_name: str
+    last_name: str
+    email: EmailStr
+    job_title: Optional[str] = None
+    avatar_url: Optional[str] = None
+    status: str
+    city_name: str
+    work_location_name: str
+    created_at: datetime
+    updated_at: datetime

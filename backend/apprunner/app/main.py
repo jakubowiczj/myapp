@@ -1,5 +1,5 @@
 import os
-from fastapi import FastAPI, Depends, HTTPException
+from fastapi import FastAPI, Depends, HTTPException, Query
 from fastapi.middleware.cors import CORSMiddleware
 from sqlalchemy.orm import Session
 from sqlalchemy import text
@@ -50,3 +50,13 @@ def get_work_locations(db: Session = Depends(get_db)):
 @app.get("/users", response_model=list[schemas.UserOut])
 def get_users(db: Session = Depends(get_db)):
     return crud.list_users(db)
+
+@app.get("/users/table", response_model=list[schemas.UserRow], summary="List Users (flattened for table)")
+def users_table(
+    page: int = Query(1, ge=1),
+    limit: int = Query(50, ge=1, le=200),
+    sort: str = Query("last_name"),
+    order: str = Query("asc"),
+    db: Session = Depends(get_db),
+):
+    return crud.list_user_rows(db, page=page, limit=limit, sort=sort, order=order)
