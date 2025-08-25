@@ -1,13 +1,9 @@
 // src/app/page.tsx
-async function getHealth() {
-  const base = process.env.NEXT_PUBLIC_API_BASE!;
-  const res = await fetch(`${base}/health`, { cache: "no-store" });
-  if (!res.ok) return { status: "down" };
-  return res.json() as Promise<{ status: string }>;
-}
+import { healthCheck } from "@/lib/api";
 
 export default async function Home() {
-  const data = await getHealth();
+  const data = await healthCheck();
+
   return (
     <main className="p-8 max-w-3xl mx-auto">
       <h1 className="text-3xl font-bold">MyApp</h1>
