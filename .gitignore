@@ -3,7 +3,7 @@ frontend/node_modules
 frontend/.next
 frontend/.turbo
 frontend/.env*
-!.env.example
+!frontend/.env.example
 
 # Python / venv
 *.pyc
@@ -23,3 +23,7 @@ docker-compose.local.yml
 
 # local installers
 pandoc-*.pkg
+
+# Backend env
+backend/.env*
+!backend/.env.example
