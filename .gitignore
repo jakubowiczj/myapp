@@ -2,8 +2,12 @@
 frontend/node_modules
 frontend/.next
 frontend/.turbo
+
+# Env files (frontend + backend)
 frontend/.env*
 !frontend/.env.example
+backend/.env*
+!backend/.env.example
 
 # Python / venv
 *.pyc
@@ -21,9 +25,5 @@ __pycache__/
 .env.local
 docker-compose.local.yml
 
-# local installers
+# Local installers
 pandoc-*.pkg
-
-# Backend env
-backend/.env*
-!backend/.env.example
